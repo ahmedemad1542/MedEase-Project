@@ -1,0 +1,20 @@
+class AppRoutes {
+  static const String chatBotScreen = '/chatBotScreen';
+  static const String welcomeScreen = '/welcomeScreen';
+  static const String registerScreen = '/registerScreen';
+  static const String loginScreen = '/loginScreen';
+  static const String splashScreen = '/splashScreen';
+  static const String profileScreen = '/profileScreen';
+  static const String homeScreen = '/homeScreen';
+  static const String diseasesScreen = '/diseasesScreen';
+  static const String advicesScreen = '/advicesScreen';
+  static const String labTestsScreen = '/labTestsScreen';
+  static const String calculatorScreen = '/calculatorScreen';
+  static const String bmiCalculatorScreen = '/bmiCalculatorScreen';
+  static const String appointmentScreen = '/appointmentScreen';
+  static const String doctorsScreen = '/doctorsScreen';
+  static const String patientScreen = '/patientScreen';
+  static const String myAppointmentsScreen = '/myAppointmentsScreen';
+  static const String advertisementScreen = '/advertisementScreen';
+  static const String deleteAdvertisementScreen = '/deleteAdvertisementScreen';
+}
