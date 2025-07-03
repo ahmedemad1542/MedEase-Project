@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:medease1/core/routing/app_routes.dart';
-import 'package:medease1/core/utils/storage_helper.dart';
+import 'package:medease1/core/storage/storage_helper.dart';
+import 'package:medease1/core/storage/storage_keys.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -16,8 +17,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Timer(Duration(seconds: 1), () async {
-      String? token = await StorageHelper().getData(key: "accesstoken");
-      String? role = await StorageHelper().getData(key: "role");
+      String? token = await StorageHelper().getData(
+        key: StorageKeys.accessToken,
+      );
+      String? role = await StorageHelper().getData(key: StorageKeys.role);
 
       if (token == null) {
         context.goNamed(AppRoutes.loginScreen);

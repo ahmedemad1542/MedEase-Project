@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:medease1/core/storage/storage_keys.dart';
 import 'package:medease1/core/utils/service_locator.dart';
-import 'package:medease1/core/utils/storage_helper.dart';
+import 'package:medease1/core/storage/storage_helper.dart';
 
 import 'package:medease1/generated/l10n.dart';
 import 'package:medease1/core/routing/router_generation_config.dart';
@@ -11,8 +12,13 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
 
-  sl<StorageHelper>().deleteData(key: "accesstoken");
-  sl<StorageHelper>().deleteData(key: "role");
+  // sl<StorageHelper>().deleteData(key: StorageKeys.accessToken);
+  // sl<StorageHelper>().deleteData(key: StorageKeys.role);
+  // sl<StorageHelper>().saveData(
+  //   key: StorageKeys.accessToken,
+  //   value:
+  //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODBhYWQxYzFjZmI1MmRjZmEzMGE5MjUiLCJuYW1lIjoiS2ggTWgiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3NTEzNzk0MTcsImV4cCI6MTc1MTM4MDMxN30.vUIKXm-RSJ47ldjK5B4KHBAulBhbuyNgXl9ZGYUck4g',
+  // );
 
   runApp(MyApp());
 }

@@ -10,6 +10,7 @@ class ApiEndpoints {
   static const String getAdvertisements = "/advertisements";
 
   static const String getDoctors = "/users/doctors";
+
   static String createAppointment(id) => "/appointments/doctor/$id";
   static String deleteAdvertisement(id) => "/advertisements/$id";
 }

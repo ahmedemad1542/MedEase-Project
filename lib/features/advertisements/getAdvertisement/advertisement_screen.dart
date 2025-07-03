@@ -21,9 +21,17 @@ class AdvertisementScreen extends StatelessWidget {
               context,
             ).showSnackBar(SnackBar(content: Text(state.message)));
           }
+          if (state is AdvertisementUpdated) {
+            context.pop();
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
         },
         builder: (context, state) {
-          if (state is AdvertisementsLoading) {
+          var cubit = AdvertisementsCubit.get(context);
+          if (state is AdvertisementsLoading ||
+              state is AdvertisementUpdatingLoading) {
             return const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -101,18 +109,113 @@ class AdvertisementScreen extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Align(
-                              alignment: Alignment.centerRight,
-                              child: TextButton(
-                                onPressed: () {
-                                  context.pushReplacement(
-                                    AppRoutes.deleteAdvertisementScreen,
-                                    extra: advertisement.id,
-                                  );
-                                },
-                                child: const Text(
-                                  "Delete",
-                                  style: TextStyle(color: Colors.red),
+                            Visibility(
+                              visible: cubit.isAdmin,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () {
+                                    context.pushReplacement(
+                                      AppRoutes.deleteAdvertisementScreen,
+                                      extra: advertisement.id,
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Delete",
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              visible: cubit.isAdmin,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () {
+                                    cubit.titleController.text =
+                                        advertisement.title;
+                                    cubit.descriptionController.text =
+                                        advertisement.description;
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text(
+                                            "Update Advertisement",
+                                          ),
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              TextField(
+                                                controller:
+                                                    cubit.titleController,
+                                                decoration:
+                                                    const InputDecoration(
+                                                      hintText:
+                                                          "Enter new Title",
+                                                      border:
+                                                          OutlineInputBorder(),
+                                                    ),
+                                              ),
+                                              const SizedBox(height: 10),
+                                              TextField(
+                                                maxLines: 5,
+                                                controller:
+                                                    cubit.descriptionController,
+                                                decoration: const InputDecoration(
+                                                  hintText:
+                                                      "Enter new description",
+                                                  border: OutlineInputBorder(),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          actions: [
+                                            TextButton(
+                                              onPressed:
+                                                  () => Navigator.pop(context),
+                                              child: const Text("Cancel"),
+                                            ),
+                                            BlocProvider.value(
+                                              value: cubit,
+                                              child: Builder(
+                                                builder: (context) {
+                                                  return BlocBuilder<
+                                                    AdvertisementsCubit,
+                                                    AdvertisementsState
+                                                  >(
+                                                    builder: (context, state) {
+                                                      return TextButton(
+                                                        onPressed: () {
+                                                          cubit.updateAdvertisement(
+                                                            id:
+                                                                advertisement
+                                                                    .id,
+                                                          );
+                                                        },
+                                                        child:
+                                                            state
+                                                                    is AdvertisementUpdatingLoading
+                                                                ? CircularProgressIndicator()
+                                                                : const Text(
+                                                                  "Update",
+                                                                ),
+                                                      );
+                                                    },
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Update",
+                                    style: TextStyle(color: Colors.green),
+                                  ),
                                 ),
                               ),
                             ),

@@ -30,7 +30,7 @@ import 'package:medease1/features/welcome/welcome_page.dart';
 
 class RouterGenerationConfig {
   static GoRouter goRouter = GoRouter(
-    initialLocation: AppRoutes.splashScreen,
+    initialLocation: AppRoutes.loginScreen,
     routes: [
       GoRoute(
         path: AppRoutes.welcomeScreen,

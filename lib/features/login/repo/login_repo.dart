@@ -5,8 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:medease1/core/networking/api_endpoints.dart';
 import 'package:medease1/core/networking/dio_helper.dart';
+import 'package:medease1/core/storage/storage_keys.dart';
 import 'package:medease1/core/utils/service_locator.dart';
-import 'package:medease1/core/utils/storage_helper.dart';
+import 'package:medease1/core/storage/storage_helper.dart';
 import 'package:medease1/features/login/model/login_response_model.dart';
 
 class LoginRepo {
@@ -36,25 +37,25 @@ class LoginRepo {
           log('🎭 Token Claims: $decodedToken');
 
           await sl<StorageHelper>().saveData(
-            key: "accesstoken",
+            key: StorageKeys.accessToken,
             value: loginResponseModel.accessToken!,
           );
           await sl<StorageHelper>().saveData(
-            key: "role",
+            key: StorageKeys.role,
             value: loginResponseModel.role!,
           );
           await sl<StorageHelper>().saveData(
-            key: "refreshtoken",
+            key: StorageKeys.refreshToken,
             value: loginResponseModel.refreshToken!,
           );
 
           final String name = decodedToken["name"];
           await sl<StorageHelper>().saveData(
-            key: "name",
+            key: StorageKeys.name,
             value: name.toString(),
           );
           await sl<StorageHelper>().saveData(
-            key: "name",
+            key: StorageKeys.name,
             value: decodedToken["name"],
           );
 
