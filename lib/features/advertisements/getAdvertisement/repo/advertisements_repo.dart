@@ -33,4 +33,26 @@ class AdvertisementsRepo {
       throw Exception('Error: $e');
     }
   }
+
+  // update advertisment
+  Future<bool> updateAdvertisement({
+    required String id,
+    required String title,
+    required String description,
+  }) async {
+    try {
+      final response = await dioHelper.patchRequest(
+        endpoint: '${ApiEndpoints.getAdvertisements}/$id',
+        data: {'title': title, 'description': description},
+        isFormData: true,
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to update advertisement');
+      }
+      return response.data['success'] as bool? ?? false;
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
 }

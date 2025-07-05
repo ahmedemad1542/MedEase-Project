@@ -1,7 +1,7 @@
 import 'package:get_it/get_it.dart';
 
 import 'package:medease1/core/networking/dio_helper.dart';
-import 'package:medease1/core/utils/storage_helper.dart';
+import 'package:medease1/core/storage/storage_helper.dart';
 import 'package:medease1/features/advertisements/deleteAdvertisement/cubit/delete_advertisement_cubit.dart';
 import 'package:medease1/features/advertisements/deleteAdvertisement/repo/delete_advertisement_repo.dart';
 import 'package:medease1/features/advertisements/getAdvertisement/cubit/advertisements_cubit.dart';

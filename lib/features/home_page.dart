@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medease1/calculators/calculators_page.dart';
+import 'package:medease1/core/utils/service_locator.dart';
+import 'package:medease1/features/advertisements/getAdvertisement/advertisement_screen.dart';
+import 'package:medease1/features/advertisements/getAdvertisement/cubit/advertisements_cubit.dart';
 import 'package:medease1/features/profile/profile_screen.dart';
 import 'diseases_page.dart';
 import 'advices_page.dart';
@@ -22,7 +26,10 @@ class HomePageState extends State<HomePage> {
     _pages = [
       MedEaseHomeScreen(),
       DiseasesPage(),
-      AdvicesPage(),
+      BlocProvider(
+        create: (context) => sl<AdvertisementsCubit>()..getAdvertisements(),
+        child: AdvertisementScreen(),
+      ),
       CalculatorsPage(),
       ProfileScreen(), // هنا تبعت التوكن صح
     ];
@@ -76,7 +83,7 @@ class HomePageState extends State<HomePage> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.health_and_safety),
-              label: "Advices",
+              label: "Advertisements",
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.calculate),

@@ -18,6 +18,13 @@ class Advertisementsloaded extends AdvertisementsState {
   });
 }
 
+class AdvertisementUpdated extends AdvertisementsState {
+  final String message;
+  AdvertisementUpdated(this.message);
+}
+
+class AdvertisementUpdatingLoading extends AdvertisementsState {}
+
 class AdvertisementsError extends AdvertisementsState {
   final String message;
 

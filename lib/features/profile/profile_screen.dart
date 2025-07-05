@@ -4,8 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:medease1/core/routing/app_routes.dart';
+import 'package:medease1/core/storage/storage_keys.dart';
 import 'package:medease1/core/utils/service_locator.dart';
-import 'package:medease1/core/utils/storage_helper.dart';
+import 'package:medease1/core/storage/storage_helper.dart';
 import 'package:medease1/features/profile/cubit/profile_cubit.dart';
 import 'package:medease1/features/profile/cubit/profile_state.dart';
 import 'package:medease1/features/profile/repo/profile_repo.dart';
@@ -166,8 +167,12 @@ class ProfileScreenState extends State<ProfileScreen> {
                       Center(
                         child: InkWell(
                           onTap: () {
-                            sl<StorageHelper>().deleteData(key: "accesstoken");
-                            sl<StorageHelper>().deleteData(key: "role");
+                            sl<StorageHelper>().deleteData(
+                              key: StorageKeys.accessToken,
+                            );
+                            sl<StorageHelper>().deleteData(
+                              key: StorageKeys.role,
+                            );
                             context.pushReplacementNamed(AppRoutes.loginScreen);
                           },
                           child: const Text(

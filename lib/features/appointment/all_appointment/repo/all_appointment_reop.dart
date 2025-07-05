@@ -2,8 +2,9 @@ import 'dart:developer';
 
 import 'package:dartz/dartz.dart';
 import 'package:medease1/core/networking/api_endpoints.dart';
+import 'package:medease1/core/storage/storage_keys.dart';
 import 'package:medease1/core/utils/service_locator.dart';
-import 'package:medease1/core/utils/storage_helper.dart';
+import 'package:medease1/core/storage/storage_helper.dart';
 import 'package:medease1/features/appointment/all_appointment/model/appointment_model.dart';
 import '../../../../core/networking/dio_helper.dart';
 
@@ -13,7 +14,9 @@ class GetAppointmentRepo {
 
   Future<Either<String, List<AppointmentModel>>> getAppointment() async {
     try {
-      final token = await sl<StorageHelper>().getData(key: "accesstoken");
+      final token = await sl<StorageHelper>().getData(
+        key: StorageKeys.accessToken,
+      );
       log('🔐 Token used in ProfileRepo: $token');
 
       final response = await dioHelper.getResponse(
