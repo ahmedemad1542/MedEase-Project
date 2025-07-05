@@ -24,6 +24,10 @@ class AdviceUpdated extends AdviceState {}
 
 class AdviceDeleted extends AdviceState {}
 
+class AdviceLikeSuccess extends AdviceState {}
+
+class AdviceDislikeSuccess extends AdviceState {}
+
 class AdviceCreatingError extends AdviceState {
   final String message;
   AdviceCreatingError(this.message);

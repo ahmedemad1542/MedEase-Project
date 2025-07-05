@@ -18,7 +18,9 @@ class  ApiEndpoints {
   static const String getAllAdvices = '/advices/';
   static const String createAdvice = '/advices/';
   static const String createFullAdvice = '/advices/'; // نفس create العادي
-  static const String createDislike = '/advices/dislike';
+  static const String likeAdvice = "/advice/"; // زائد ID و '/like'
+  static const String dislikeAdvice = "/advice/"; // زائد ID و '/dislike'
+
   static const String updateAdvice = '/advices/'; // زائد ID ديناميك في الريبو
   static const String deleteAdvice = '/advices/'; // زائد ID ديناميك في الريبو
 }

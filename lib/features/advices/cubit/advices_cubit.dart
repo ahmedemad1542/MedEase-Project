@@ -1,96 +1,43 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medease1/features/advices/cubit/advices_state.dart';
 import 'package:medease1/features/advices/model/advices_model.dart';
 
-import 'package:medease1/features/advices/repo/advices_reop.dart';
+import 'package:medease1/features/advices/repo/advices_repo.dart';
 
 class AdviceCubit extends Cubit<AdviceState> {
   final AdviceRepo adviceRepo;
 
   AdviceCubit(this.adviceRepo) : super(AdviceInitial());
 
-  List<AdviceModel> advices = [];
-
-  Future<void> fetchAdvices() async {
+  Future<void> getAdvices() async {
     emit(AdviceLoading());
     try {
       final response = await adviceRepo.getAllAdvices();
-      final List data = response?.data["data"] ?? [];
-      advices = data.map((e) => AdviceModel.fromJson(e)).toList();
+      final List<dynamic> data = response?.data['data'] ?? [];
+      final advices = data.map((e) => AdviceModel.fromJson(e)).toList();
       emit(AdviceLoaded(advices));
     } catch (e) {
       emit(AdviceError(e.toString()));
     }
   }
 
-  Future<void> createAdvice({
-    required String diseasesCategoryId,
-    required String title,
-  }) async {
-    emit(AdviceCreating());
+  Future<void> likeAdvice(String adviceId) async {
     try {
-      await adviceRepo.createAdvice(
-        diseasesCategoryId: diseasesCategoryId,
-        title: title,
-      );
-      emit(AdviceCreated());
-      await fetchAdvices();
+      await adviceRepo.createLike(adviceId);
+      emit(AdviceLikeSuccess());
     } catch (e) {
-      emit(AdviceCreatingError(e.toString()));
+      emit(AdviceError("Failed to like advice: \$e"));
     }
   }
 
-  Future<void> createDislike({
-    required String diseasesCategoryId,
-    required String title,
-    required String description,
-    required String doctorId,
-  }) async {
-    emit(AdviceCreating());
+  Future<void> dislikeAdvice(String adviceId) async {
     try {
-      await adviceRepo.createDislike(
-        diseasesCategoryId: diseasesCategoryId,
-        title: title,
-        description: description,
-        doctorId: doctorId,
-      );
-      emit(AdviceCreated());
-      await fetchAdvices();
+      await adviceRepo.createDislike(adviceId);
+      emit(AdviceDislikeSuccess());
     } catch (e) {
-      emit(AdviceCreatingError(e.toString()));
-    }
-  }
-
-  Future<void> updateAdvice({
-    required String adviceId,
-    required String diseasesCategoryId,
-    required String title,
-    required String description,
-  }) async {
-    emit(AdviceCreating());
-    try {
-      await adviceRepo.updateAdvice(
-        adviceId: adviceId,
-        diseasesCategoryId: diseasesCategoryId,
-        title: title,
-        description: description,
-      );
-      emit(AdviceUpdated());
-      await fetchAdvices();
-    } catch (e) {
-      emit(AdviceCreatingError(e.toString()));
-    }
-  }
-
-  Future<void> deleteAdvice(String adviceId) async {
-    emit(AdviceCreating());
-    try {
-      await adviceRepo.deleteAdvice(adviceId);
-      emit(AdviceDeleted());
-      await fetchAdvices();
-    } catch (e) {
-      emit(AdviceCreatingError(e.toString()));
+      emit(AdviceError("Failed to dislike advice: \$e"));
     }
   }
 }
-

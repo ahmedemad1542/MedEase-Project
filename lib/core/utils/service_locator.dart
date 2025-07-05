@@ -7,7 +7,7 @@ import 'package:medease1/features/advertisements/deleteAdvertisement/repo/delete
 import 'package:medease1/features/advertisements/getAdvertisement/cubit/advertisements_cubit.dart';
 import 'package:medease1/features/advertisements/getAdvertisement/repo/advertisements_repo.dart';
 import 'package:medease1/features/advices/cubit/advices_cubit.dart';
-import 'package:medease1/features/advices/repo/advices_reop.dart';
+import 'package:medease1/features/advices/repo/advices_repo.dart';
 import 'package:medease1/features/appointment/all_appointment/cubit/get_appointment_cubit.dart';
 import 'package:medease1/features/appointment/all_appointment/repo/all_appointment_reop.dart';
 import 'package:medease1/features/doctors/cubit/doctor_cubit.dart';
