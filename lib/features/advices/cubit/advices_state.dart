@@ -1,19 +1,30 @@
 import 'package:medease1/features/advices/model/advices_model.dart';
 
-abstract class AdvicesState {}
+abstract class AdviceState {}
 
-class AdvicesInitial extends AdvicesState {}
+class AdviceInitial extends AdviceState {}
 
-class AdvicesLoaded extends AdvicesState {
-  List<AdvicesModel> advicesmodel;
+class AdviceLoading extends AdviceState {}
 
-  AdvicesLoaded(this.advicesmodel);
+class AdviceLoaded extends AdviceState {
+  final List<AdviceModel> advices;
+  AdviceLoaded(this.advices);
 }
 
-class AdvicesError extends AdvicesState {
-  String errorMessage;
-
-  AdvicesError(this.errorMessage);
+class AdviceError extends AdviceState {
+  final String errormessage;
+  AdviceError(this.errormessage);
 }
 
-class AdvicesLoading extends AdvicesState {}
+class AdviceCreating extends AdviceState {}
+
+class AdviceCreated extends AdviceState {}
+
+class AdviceUpdated extends AdviceState {}
+
+class AdviceDeleted extends AdviceState {}
+
+class AdviceCreatingError extends AdviceState {
+  final String message;
+  AdviceCreatingError(this.message);
+}

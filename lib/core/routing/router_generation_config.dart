@@ -100,8 +100,8 @@ class RouterGenerationConfig {
         name: AppRoutes.advicesScreen,
         builder:
             (context, state) => BlocProvider(
-              create: (context) => sl<AdvicesCubit>()..getAdvices(),
-              child: AdvicesScreen(),
+              create: (context) => sl<AdviceCubit>()..fetchAdvices(),
+              child: AdviceScreen(),
             ),
       ),
 

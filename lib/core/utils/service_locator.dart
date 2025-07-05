@@ -47,9 +47,9 @@ void setupServiceLocator() {
   sl.registerLazySingleton(() => GetAppointmentRepo(sl<DioHelper>()));
   // advices Cubit
 
-  sl.registerFactory(() => AdvicesCubit(sl<AdvicesRepo>()));
+  sl.registerFactory(() => AdviceCubit(sl<AdviceRepo>()));
   // advices Repo
-  sl.registerLazySingleton(() => AdvicesRepo(sl<DioHelper>()));
+  sl.registerLazySingleton(() => AdviceRepo(sl<DioHelper>()));
   // Doctor Cubit
   sl.registerFactory(() => DoctorCubit(sl<DoctorsRepo>()));
   // Doctor Repo

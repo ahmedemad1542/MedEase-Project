@@ -2,91 +2,150 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medease1/features/advices/cubit/advices_cubit.dart';
 import 'package:medease1/features/advices/cubit/advices_state.dart';
+import 'package:medease1/features/advices/model/advices_model.dart';
 
-class AdvicesScreen extends StatelessWidget {
-  const AdvicesScreen({super.key});
+class AdviceScreen extends StatelessWidget {
+  
+  const AdviceScreen({super.key });
+
+  void _showAddDialog(BuildContext context, TextEditingController controller) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Add Advice'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(hintText: 'Advice Title'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await context.read<AdviceCubit>().createAdvice(
+                    diseasesCategoryId: '1',
+                    title: controller.text,
+                  );
+              Navigator.pop(context);
+            },
+            child: const Text('Create'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showUpdateDialog(BuildContext context, AdviceModel advice) {
+    final controller = TextEditingController(text: advice.title);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Update Advice'),
+        content: TextField(
+          controller: controller,
+          decoration: const InputDecoration(hintText: 'Edit Title'),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await context.read<AdviceCubit>().updateAdvice(
+                    adviceId: advice.id,
+                    diseasesCategoryId: '1',
+                    title: controller.text,
+                    description: advice.description,
+                  );
+              Navigator.pop(context);
+            },
+            child: const Text('Update'),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final _titleController = TextEditingController();
+
+    context.read<AdviceCubit>().fetchAdvices();
+
     return Scaffold(
-      appBar: AppBar(title: Text("Advices")),
-      body: BlocConsumer<AdvicesCubit, AdvicesState>(
-        listener: (context, state) {
-          if (state is AdvicesError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
-          }
-          if (state is AdvicesLoaded) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Advices loaded successfully')),
-            );
-          }
-        },
+      appBar: AppBar(
+        title: const Text('Advices'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () => _showAddDialog(context, _titleController),
+          ),
+        ],
+      ),
+      body: BlocBuilder<AdviceCubit, AdviceState>(
         builder: (context, state) {
-          if (state is AdvicesLoading) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 10),
-                  Text("Loading advices..."),
-                ],
-              ),
-            );
-          }
-          if (state is AdvicesLoaded) {
+          if (state is AdviceLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is AdviceLoaded) {
             return ListView.builder(
-              padding: const EdgeInsets.all(16.0),
-              itemCount: state.advicesmodel.length,
+              itemCount: state.advices.length,
               itemBuilder: (context, index) {
-                final advice = state.advicesmodel[index];
-                return Card(
-                  elevation: 3,
-                  margin: const EdgeInsets.only(bottom: 12.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16.0),
-                    leading: const Icon(
-                      Icons.lightbulb_outline,
-                      color: Colors.teal,
+                final advice = state.advices[index];
+                return GestureDetector(
+                  onLongPress: () => _showUpdateDialog(context, advice),
+                  child: Container(
+                    margin: const EdgeInsets.all(8),
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.shade300,
+                          blurRadius: 5,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
-                    title: Text(
-                      advice.title,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(advice.title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.thumb_up),
+                              onPressed: () {
+                                // TODO: like API
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.thumb_down),
+                              onPressed: () async {
+                                await context.read<AdviceCubit>().createDislike(
+                                      diseasesCategoryId: '1',
+                                      title: advice.title,
+                                      description: advice.description,
+                                      doctorId: advice.doctorId,
+                                    );
+                              },
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                    subtitle: Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        advice.description,
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
-                    ),
-                    onTap: () {
-                      // Add navigation or detail view if needed
-                    },
                   ),
                 );
               },
             );
-            // return ListView.builder(
-            //   itemCount: state.advicesmodel.length,
-            //   itemBuilder: (context, index) {
-            //     final advice = state.advicesmodel[index];
-            //     return ListTile(
-            //       title: Text(advice.title),
-            //       subtitle: Text(advice.description),
-            //     );
-            //   },
-            // );
+          } else {
+            return const Center(child: Text('Something went wrong'));
           }
-          return Center();
         },
       ),
     );

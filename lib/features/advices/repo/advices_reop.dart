@@ -1,35 +1,92 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
 import 'package:medease1/core/networking/api_endpoints.dart';
 import 'package:medease1/core/utils/service_locator.dart';
 import 'package:medease1/core/utils/storage_helper.dart';
 import 'package:medease1/features/advices/model/advices_model.dart';
 import '../../../core/networking/dio_helper.dart';
 
-class AdvicesRepo {
-  final DioHelper dioHelper;
-  AdvicesRepo(this.dioHelper);
+class AdviceRepo {
+  final DioHelper _dioHelper = DioHelper();
+   final DioHelper dioHelper;
 
-  Future<Either<String, List<AdvicesModel>>> getAdvices() async {
-    try {
-      final token = await sl<StorageHelper>().getData(key: "accesstoken");
-      log('🔐 Token used in ProfileRepo: $token');
+   AdviceRepo(this.dioHelper);
 
-      final response = await dioHelper.getResponse(
-        endpoint: ApiEndpoints.getAdvices,
-      );
+  Future<Response?> getAllAdvices() async {
+    return await _dioHelper.getResponse(endpoint: ApiEndpoints.getAllAdvices);
+  }
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = response.data['data'];
-        final advices = data.map((e) => AdvicesModel.fromJson(e)).toList();
+  Future<Response?> createAdvice({
+    required String diseasesCategoryId,
+    required String title,
+  }) async {
+    return await _dioHelper.postRequest(
+      endpoint: ApiEndpoints.createAdvice,
+      data: {
+        "diseasesCategoryId": diseasesCategoryId,
+        "title": title,
+      },
+    );
+  }
 
-        return right(advices);
-      } else {
-        return left('Error: ${response.statusCode}');
-      }
-    } catch (error) {
-      return left(error.toString());
-    }
+  Future<Response?> createFullAdvice({
+    required String diseasesCategoryId,
+    required String title,
+    required String description,
+    required String doctorId,
+    File? imageFile,
+  }) async {
+    FormData formData = FormData.fromMap({
+      "diseasesCategoryId": diseasesCategoryId,
+      "title": title,
+      "description": description,
+      "doctorId": doctorId,
+      if (imageFile != null)
+        "image": await MultipartFile.fromFile(imageFile.path),
+    });
+
+    return await DioHelper.dio!.post(ApiEndpoints.createFullAdvice, data: formData);
+  }
+
+  Future<Response?> createDislike({
+    required String diseasesCategoryId,
+    required String title,
+    required String description,
+    required String doctorId,
+    File? imageFile,
+  }) async {
+    FormData formData = FormData.fromMap({
+      "diseasesCategoryId": diseasesCategoryId,
+      "title": title,
+      "description": description,
+      "doctorId": doctorId,
+      if (imageFile != null)
+        "image": await MultipartFile.fromFile(imageFile.path),
+    });
+
+    return await DioHelper.dio!.post(ApiEndpoints.createDislike, data: formData);
+  }
+
+  Future<Response?> updateAdvice({
+    required String adviceId,
+    required String diseasesCategoryId,
+    required String title,
+    required String description,
+  }) async {
+    return await DioHelper.dio!.patch(
+      '${ApiEndpoints.updateAdvice}$adviceId',
+      data: {
+        "diseasesCategoryId": diseasesCategoryId,
+        "title": title,
+        "description": description,
+      },
+    );
+  }
+
+  Future<Response?> deleteAdvice(String adviceId) async {
+    return await DioHelper.dio!.delete('${ApiEndpoints.deleteAdvice}$adviceId');
   }
 }

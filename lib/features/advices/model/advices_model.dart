@@ -1,44 +1,32 @@
-class AdvicesModel {
-  String diseasesCategoryName;
-  String doctorName;
-  String id;
-  String title;
-  String description;
-  String imgUrl;
-  String imgPublicId;
-  DateTime createdAt;
-  DateTime updatedAt;
-  int v;
-  int likesCount;
-  int dislikesCount;
+class AdviceModel {
+  final String id;
+  final String doctorId;
+  final String title;
+  final String description;
+  final String diseasesCategoryName;
+  final String createdAt;
+  final String updatedAt;
 
-  AdvicesModel({
-    required this.diseasesCategoryName,
-    required this.doctorName,
+  AdviceModel({
     required this.id,
+    required this.doctorId,
     required this.title,
     required this.description,
-    required this.imgUrl,
-    required this.imgPublicId,
+    required this.diseasesCategoryName,
     required this.createdAt,
     required this.updatedAt,
-    required this.v,
-    required this.likesCount,
-    required this.dislikesCount,
   });
 
-  factory AdvicesModel.fromJson(Map<String, dynamic> json) => AdvicesModel(
-    diseasesCategoryName: json["diseasesCategoryName"],
-    doctorName: json["doctorName"] ?? "",
-    id: json["_id"] ?? "",
-    title: json["title"] ?? "",
-    description: json["description"] ?? "",
-    imgUrl: json["ImgUrl"] ?? "",
-    imgPublicId: json["ImgPublicId"] ?? "",
-    createdAt: DateTime.parse(json["createdAt"] ?? ""),
-    updatedAt: DateTime.parse(json["updatedAt"] ?? ""),
-    v: json["__v"] ?? 0,
-    likesCount: json["likesCount"] ?? 0,
-    dislikesCount: json["dislikesCount"] ?? 0,
-  );
+  factory AdviceModel.fromJson(Map<String, dynamic> json) {
+    return AdviceModel(
+      id: json['_id'] ?? '',
+      doctorId: json['doctorId'] ?? '',
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      diseasesCategoryName: json['diseasesCategoryName'] ?? '',
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
+    );
+  }
 }
+
