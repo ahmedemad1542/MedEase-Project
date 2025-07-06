@@ -4,6 +4,7 @@ import 'package:medease1/calculators/calculators_page.dart';
 import 'package:medease1/core/utils/service_locator.dart';
 import 'package:medease1/features/advertisements/getAdvertisement/advertisement_screen.dart';
 import 'package:medease1/features/advertisements/getAdvertisement/cubit/advertisements_cubit.dart';
+import 'package:medease1/features/advices/advices_screen.dart';
 import 'package:medease1/features/profile/profile_screen.dart';
 import 'diseases_page.dart';
 import 'advices_page.dart';
@@ -25,7 +26,7 @@ class HomePageState extends State<HomePage> {
     super.initState();
     _pages = [
       MedEaseHomeScreen(),
-      DiseasesPage(),
+      AdviceScreen(),
       BlocProvider(
         create: (context) => sl<AdvertisementsCubit>()..getAdvertisements(),
         child: AdvertisementScreen(),

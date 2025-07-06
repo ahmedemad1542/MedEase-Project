@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:medease1/core/utils/service_locator.dart';
 import 'package:medease1/features/advices/cubit/advices_cubit.dart';
 import 'package:medease1/features/advices/cubit/advices_state.dart';
 import 'package:medease1/features/advices/model/advices_model.dart';
@@ -24,99 +25,281 @@ class _AdviceScreenState extends State<AdviceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = context.read<AdviceCubit>();
     return Scaffold(
-      appBar: AppBar(title: const Text('Advices')),
-      body: BlocBuilder<AdviceCubit, AdviceState>(
-        builder: (context, state) {
-          if (state is AdviceLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is AdviceLoaded) {
-            final categories = state.advices.map((e) => e.diseasesCategoryName).toSet().toList();
-
-            return ListView(
-              padding: const EdgeInsets.all(12),
-              children: [
-                ...categories.map(
-                  (category) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ListTile(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        tileColor: Colors.blue.shade50,
-                        title: Text(category, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        trailing: Icon(selectedCategory == category ? Icons.expand_less : Icons.expand_more),
-                        onTap: () {
-                          setState(() => selectedCategory = selectedCategory == category ? null : category);
-                        },
-                      ),
-                      if (selectedCategory == category)
-                        ...state.advices
-                            .where((e) => e.diseasesCategoryName == category)
-                            .map(
-                              (advice) => Card(
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                                elevation: 3,
-                                margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(advice.title, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                                      const SizedBox(height: 8),
-                                      Text(advice.description),
-                                      const SizedBox(height: 12),
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.thumb_up,
-                                              color: likedAdvice[advice.id] == true ? Colors.green : Colors.grey,
-                                            ),
-                                            onPressed: () async {
-                                              await context.read<AdviceCubit>().likeAdvice(advice.id);
-                                              setState(() {
-                                                likedAdvice[advice.id] = true;
-                                                dislikedAdvice[advice.id] = false;
-                                              });
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(content: Text("Liked successfully")),
-                                              );
-                                            },
-                                          ),
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.thumb_down,
-                                              color: dislikedAdvice[advice.id] == true ? Colors.red : Colors.grey,
-                                            ),
-                                            onPressed: () async {
-                                              await context.read<AdviceCubit>().dislikeAdvice(advice.id);
-                                              setState(() {
-                                                dislikedAdvice[advice.id] = true;
-                                                likedAdvice[advice.id] = false;
-                                              });
-                                              ScaffoldMessenger.of(context).showSnackBar(
-                                                const SnackBar(content: Text("Disliked successfully")),
-                                              );
-                                            },
-                                          )
-                                        ],
-                                      )
-                                    ],
-                                  ),
+      appBar: AppBar(
+        title: const Text('Advices'),
+        backgroundColor: Colors.blue,
+        actions: [
+          Visibility(
+            visible: context.read<AdviceCubit>().isPrevelliged,
+            child: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      title: const Text('Create Advice'),
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextField(
+                            controller: cubit.titleController,
+                            decoration: const InputDecoration(
+                              labelText: 'Title',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
                                 ),
                               ),
-                            )
-                            .toList(),
-                    ],
-                  ),
-                )
-              ],
-            );
-          } else if (state is AdviceError) {
-            return Center(child: Text('Error: ${state.errormessage}'));
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: DropdownMenu(
+                              hintText: 'Select Category',
+                              expandedInsets: EdgeInsets.zero,
+
+                              dropdownMenuEntries:
+                                  cubit.categories
+                                      .map(
+                                        (category) => DropdownMenuEntry(
+                                          value: category,
+                                          label: category,
+                                        ),
+                                      )
+                                      .toList(),
+                              onSelected: (value) {
+                                cubit.selectedCategory = value ?? '';
+                              },
+                            ),
+                          ),
+                          SizedBox(height: 8),
+                          TextField(
+                            controller: cubit.descriptionController,
+                            decoration: const InputDecoration(
+                              labelText: 'Description',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                              ),
+                            ),
+                            style: TextStyle(
+                              color: Colors.grey.shade600,
+                              fontSize: 12,
+                            ),
+                            maxLines: 5,
+                          ),
+                        ],
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () async {
+                            if (cubit.titleController.text.isEmpty ||
+                                cubit.selectedCategory.isEmpty ||
+                                cubit.descriptionController.text.isEmpty) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Please fill all fields'),
+                                ),
+                              );
+                              return;
+                            } else {
+                              await cubit.createAdvice(
+                                diseasesCategoryId: cubit.selectedCategory,
+                                title: cubit.titleController.text,
+                                description: cubit.descriptionController.text,
+                              );
+                              cubit.titleController.clear();
+                              cubit.descriptionController.clear();
+                              cubit.selectedCategory = '';
+                              if (context.mounted) Navigator.of(context).pop();
+                            }
+                          },
+                          child: const Text('Create'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              icon: Icon(Icons.add),
+            ),
+          ),
+        ],
+      ),
+      body: BlocConsumer<AdviceCubit, AdviceState>(
+        listener: (context, state) {
+          if (state is AdviceCreated) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Error: ${state.message}')));
+          } else if (state is AdviceCreatingError) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Error: ${state.message}')));
           }
-          return const SizedBox.shrink();
+        },
+        builder: (context, state) {
+          return BlocBuilder<AdviceCubit, AdviceState>(
+            builder: (context, state) {
+              if (state is AdviceLoading || state is AdviceCreating) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (state is AdviceLoaded) {
+                final categories =
+                    state.advices
+                        .map((e) => e.diseasesCategoryName)
+                        .toSet()
+                        .toList();
+
+                return ListView(
+                  padding: const EdgeInsets.all(12),
+                  children: [
+                    ...categories.map(
+                      (category) => Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListTile(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            tileColor: Colors.blue.shade50,
+                            title: Text(
+                              category,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            trailing: Icon(
+                              selectedCategory == category
+                                  ? Icons.expand_less
+                                  : Icons.expand_more,
+                            ),
+                            onTap: () {
+                              setState(
+                                () =>
+                                    selectedCategory =
+                                        selectedCategory == category
+                                            ? null
+                                            : category,
+                              );
+                            },
+                          ),
+                          if (selectedCategory == category)
+                            ...state.advices
+                                .where(
+                                  (e) => e.diseasesCategoryName == category,
+                                )
+                                .map(
+                                  (advice) => Card(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    elevation: 3,
+                                    margin: const EdgeInsets.symmetric(
+                                      vertical: 6,
+                                      horizontal: 12,
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            advice.title,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 8),
+                                          Text(advice.description),
+                                          const SizedBox(height: 12),
+                                          Row(
+                                            children: [
+                                              IconButton(
+                                                icon: Icon(
+                                                  Icons.thumb_up,
+                                                  color:
+                                                      likedAdvice[advice.id] ==
+                                                              true
+                                                          ? Colors.green
+                                                          : Colors.grey,
+                                                ),
+                                                onPressed: () async {
+                                                  await context
+                                                      .read<AdviceCubit>()
+                                                      .likeAdvice(advice.id);
+                                                  setState(() {
+                                                    likedAdvice[advice.id] =
+                                                        true;
+                                                    dislikedAdvice[advice.id] =
+                                                        false;
+                                                  });
+                                                  ScaffoldMessenger.of(
+                                                    context,
+                                                  ).showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text(
+                                                        "Liked successfully",
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                              IconButton(
+                                                icon: Icon(
+                                                  Icons.thumb_down,
+                                                  color:
+                                                      dislikedAdvice[advice
+                                                                  .id] ==
+                                                              true
+                                                          ? Colors.red
+                                                          : Colors.grey,
+                                                ),
+                                                onPressed: () async {
+                                                  await context
+                                                      .read<AdviceCubit>()
+                                                      .dislikeAdvice(advice.id);
+                                                  setState(() {
+                                                    dislikedAdvice[advice.id] =
+                                                        true;
+                                                    likedAdvice[advice.id] =
+                                                        false;
+                                                  });
+                                                  ScaffoldMessenger.of(
+                                                    context,
+                                                  ).showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text(
+                                                        "Disliked successfully",
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              } else if (state is AdviceError) {
+                return Center(child: Text('Error: ${state.errormessage}'));
+              }
+              return const SizedBox.shrink();
+            },
+          );
         },
       ),
     );

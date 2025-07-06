@@ -21,13 +21,18 @@ class AdviceRepo {
   Future<Response?> createAdvice({
     required String diseasesCategoryId,
     required String title,
+    required String description,
+    required String doctorId,
   }) async {
     return await dioHelper.postRequest(
       endpoint: ApiEndpoints.createAdvice,
       data: {
         "diseasesCategoryId": diseasesCategoryId,
         "title": title,
+        'description': description,
+        'doctorId': doctorId,
       },
+      isFormData: true,
     );
   }
 
@@ -48,14 +53,20 @@ class AdviceRepo {
   }
 
   Future<Response?> deleteAdvice(String adviceId) async {
-    return await dioHelper.deleteRequest(endpoint: '${ApiEndpoints.deleteAdvice}$adviceId');
+    return await dioHelper.deleteRequest(
+      endpoint: '${ApiEndpoints.deleteAdvice}$adviceId',
+    );
   }
 
   Future<Response?> createLike(String adviceId) async {
-    return await DioHelper.dio!.post('${ApiEndpoints.likeAdvice}$adviceId/like');
+    return await DioHelper.dio!.post(
+      '${ApiEndpoints.likeAdvice}$adviceId/like',
+    );
   }
 
   Future<Response?> createDislike(String adviceId) async {
-    return await DioHelper.dio!.post('${ApiEndpoints.dislikeAdvice}$adviceId/dislike');
+    return await DioHelper.dio!.post(
+      '${ApiEndpoints.dislikeAdvice}$adviceId/dislike',
+    );
   }
 }

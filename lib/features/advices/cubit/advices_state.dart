@@ -18,7 +18,10 @@ class AdviceError extends AdviceState {
 
 class AdviceCreating extends AdviceState {}
 
-class AdviceCreated extends AdviceState {}
+class AdviceCreated extends AdviceState {
+  final String message;
+  AdviceCreated(this.message);
+}
 
 class AdviceUpdated extends AdviceState {}
 

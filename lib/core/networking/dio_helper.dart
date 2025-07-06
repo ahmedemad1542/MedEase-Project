@@ -110,9 +110,13 @@ class DioHelper {
   postRequest({
     required String endpoint,
     required Map<String, dynamic> data,
+    bool isFormData = false,
   }) async {
     try {
-      Response response = await dio!.post(endpoint, data: data);
+      Response response = await dio!.post(
+        endpoint,
+        data: isFormData ? FormData.fromMap(data) : data,
+      );
       return response;
     } catch (e) {
       rethrow;
