@@ -5,7 +5,9 @@ import 'package:medease1/core/utils/service_locator.dart';
 import 'package:medease1/features/advertisements/getAdvertisement/advertisement_screen.dart';
 import 'package:medease1/features/advertisements/getAdvertisement/cubit/advertisements_cubit.dart';
 import 'package:medease1/features/advices/advices_screen.dart';
+import 'package:medease1/features/advices/cubit/advices_cubit.dart';
 import 'package:medease1/features/profile/profile_screen.dart';
+import 'disease/diseases_page.dart';
 import 'diseases_page.dart';
 import 'advices_page.dart';
 import 'home_main_page.dart';
@@ -26,12 +28,15 @@ class HomePageState extends State<HomePage> {
     super.initState();
     _pages = [
       MedEaseHomeScreen(),
-      AdviceScreen(),
+      BlocProvider(
+        create: (context) => sl<AdviceCubit>(),
+        child: AdviceScreen(),
+      ),
       BlocProvider(
         create: (context) => sl<AdvertisementsCubit>()..getAdvertisements(),
         child: AdvertisementScreen(),
       ),
-      CalculatorsPage(),
+      DiseasesPage(),
       ProfileScreen(), // هنا تبعت التوكن صح
     ];
   }
@@ -79,16 +84,16 @@ class HomePageState extends State<HomePage> {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
             BottomNavigationBarItem(
-              icon: Icon(Icons.local_hospital),
-              label: "Diseases",
+              icon: Icon(Icons.medical_information_rounded),
+              label: "Advices",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.health_and_safety),
+              icon: Icon(Icons.public),
               label: "Advertisements",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.calculate),
-              label: "Calculators",
+              icon: Icon(Icons.local_hospital),
+              label: "Diseases",
             ),
             BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
           ],

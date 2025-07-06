@@ -36,12 +36,7 @@ class DioHelper {
         onError: (error, handler) async {
           MyLogger.red('Dio Error: ${error.response?.data}');
 
-          if (error.response?.data['message'].toLowerCase().contains(
-                'access',
-              ) ||
-              error.response?.data['message'].toLowerCase().contains(
-                'invalid',
-              )) {
+          if (error.response?.data['message'].toLowerCase().contains('token')) {
             MyLogger.red('Access token expired or invalid');
             sl<StorageHelper>().deleteData(key: "accesstoken");
             final refreshToken = await sl<StorageHelper>().getData(

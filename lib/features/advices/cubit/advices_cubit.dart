@@ -24,9 +24,9 @@ class AdviceCubit extends Cubit<AdviceState> {
 
   Future<void> getAdvices() async {
     emit(AdviceLoading());
-    // isPrevelliged =
-    //     await sl<StorageHelper>().getData(key: StorageKeys.role) == 'Admin' ||
-    //     await sl<StorageHelper>().getData(key: StorageKeys.role) == 'Doctor';
+    isPrevelliged =
+        await sl<StorageHelper>().getData(key: StorageKeys.role) == 'Admin' ||
+        await sl<StorageHelper>().getData(key: StorageKeys.role) == 'Doctor';
     try {
       final response = await adviceRepo.getAllAdvices();
       final List<dynamic> data = response?.data['data'] ?? [];

@@ -28,6 +28,8 @@ import 'package:medease1/features/register/register_page.dart';
 import 'package:medease1/features/splash_screen/splash_screen.dart';
 import 'package:medease1/features/welcome/welcome_page.dart';
 
+import '../../features/disease/diseases_page.dart';
+
 class RouterGenerationConfig {
   static GoRouter goRouter = GoRouter(
     initialLocation: AppRoutes.loginScreen,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medease1/core/storage/storage_keys.dart';
@@ -7,6 +8,13 @@ import 'package:medease1/core/storage/storage_helper.dart';
 
 import 'package:medease1/generated/l10n.dart';
 import 'package:medease1/core/routing/router_generation_config.dart';
+
+import 'features/disease/disease_cubit.dart';
+import 'features/disease/disease_repo.dart';
+import 'features/profile/cubit/profile_cubit.dart';
+import 'features/profile/repo/profile_repo.dart';
+import 'features/treatment/treatment_cubit.dart';
+import 'features/treatment/treatment_repo.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +28,19 @@ void main() {
   //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODBhYWQxYzFjZmI1MmRjZmEzMGE5MjUiLCJuYW1lIjoiS2ggTWgiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3NTEzNzk0MTcsImV4cCI6MTc1MTM4MDMxN30.vUIKXm-RSJ47ldjK5B4KHBAulBhbuyNgXl9ZGYUck4g',
   // );
 
-  runApp(MyApp());
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => DiseaseCubit(sl<DiseaseRepo>())),
+        BlocProvider(create: (context) => TreatmentCubit(sl<TreatmentRepo>())),
+        BlocProvider(
+          create: (context) => ProfileCubit(sl<ProfileRepo>()),
+          child: const MyApp(),
+        ),
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {

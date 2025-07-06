@@ -47,10 +47,10 @@ class LoginPage extends StatelessWidget {
               context.pushReplacementNamed(AppRoutes.homeScreen);
               // here user screen
             } else if (state.loginResponseModel.role == 'Patient') {
-              context.pushReplacementNamed(AppRoutes.patientScreen);
+              context.pushReplacementNamed(AppRoutes.homeScreen);
               // here doctor screen
             } else {
-              context.pushReplacementNamed(AppRoutes.doctorsScreen);
+              context.pushReplacementNamed(AppRoutes.homeScreen);
               // here patient screen
             }
           }

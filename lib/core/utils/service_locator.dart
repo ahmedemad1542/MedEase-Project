@@ -19,6 +19,9 @@ import 'package:medease1/features/profile/repo/profile_repo.dart';
 import 'package:medease1/features/register/cubit/register_cubit.dart';
 import 'package:medease1/features/register/repo/register_repo.dart';
 
+import '../../features/disease/disease_repo.dart';
+import '../../features/treatment/treatment_repo.dart';
+
 GetIt sl = GetIt.instance;
 void setupServiceLocator() {
   DioHelper dioHelper = DioHelper();
@@ -67,4 +70,9 @@ void setupServiceLocator() {
 
   // Storage Helper
   sl.registerLazySingleton(() => StorageHelper());
+
+  sl.registerLazySingleton(
+    () => DiseaseRepo(DioHelper.dio!, sl<StorageHelper>()),
+  );
+  sl.registerLazySingleton(() => TreatmentRepo(DioHelper.dio!));
 }
