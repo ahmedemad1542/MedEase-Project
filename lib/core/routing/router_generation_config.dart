@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:medease1/calculators/bmi_page.dart';
 import 'package:medease1/core/utils/service_locator.dart';
 import 'package:medease1/core/routing/app_routes.dart';
+import 'package:medease1/features/Ai%20Chatbot/ai_chatbot_screen.dart';
+import 'package:medease1/features/Ai%20Chatbot/cubit/chatbot_cubit.dart';
 import 'package:medease1/features/advertisements/deleteAdvertisement/cubit/delete_advertisement_cubit.dart';
 import 'package:medease1/features/advertisements/deleteAdvertisement/delete_advertisement_screen.dart';
 import 'package:medease1/features/advertisements/getAdvertisement/advertisement_screen.dart';
@@ -59,10 +61,14 @@ class RouterGenerationConfig {
             ),
       ),
       GoRoute(
-        path: AppRoutes.chatBotScreen,
-        name: AppRoutes.chatBotScreen,
-        builder: (context, state) => ChatbotPage(),
-      ),
+  path: AppRoutes.chatBotScreen,
+  name: AppRoutes.chatBotScreen,
+  builder: (context, state) => BlocProvider(
+    create: (_) => ChatCubit(),
+    child: ChatScreen(),
+  ),
+),
+
       GoRoute(
         path: AppRoutes.profileScreen,
         name: AppRoutes.profileScreen,

@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:medease1/core/storage/storage_keys.dart';
 import 'package:medease1/core/utils/service_locator.dart';
 import 'package:medease1/core/storage/storage_helper.dart';
+import 'package:medease1/features/Ai%20Chatbot/cubit/chatbot_cubit.dart';
 
 import 'package:medease1/generated/l10n.dart';
 import 'package:medease1/core/routing/router_generation_config.dart';
@@ -33,6 +34,7 @@ void main() {
       providers: [
         BlocProvider(create: (_) => DiseaseCubit(sl<DiseaseRepo>())),
         BlocProvider(create: (context) => TreatmentCubit(sl<TreatmentRepo>())),
+         BlocProvider(create: (_) => ChatCubit()),
         BlocProvider(
           create: (context) => ProfileCubit(sl<ProfileRepo>()),
           child: const MyApp(),

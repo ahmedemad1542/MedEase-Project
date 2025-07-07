@@ -22,5 +22,11 @@ class  ApiEndpoints {
   static const String dislikeAdvice = "/advice/"; // زائد ID و '/dislike'
 
   static const String updateAdvice = '/advices/'; // زائد ID ديناميك في الريبو
-  static const String deleteAdvice = '/advices/'; // زائد ID ديناميك في الريبو
-}
+  static const String deleteAdvice = '/advices/'; 
+  
+   // ✅ AI Chatbot Endpoints
+  static const String aiStartSession = "/ai/start_session";
+  static const String aiSendMessage = "/ai/send_message";
+  static const String aiGetSymptoms = "/ai/symptoms"; // غالباً من local API
+}// زائد ID ديناميك في الريبو
+

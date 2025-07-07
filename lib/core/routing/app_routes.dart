@@ -1,5 +1,5 @@
 class AppRoutes {
-  static const String chatBotScreen = '/chatBotScreen';
+  static const String chatBotScreen = '/chatScreen';
   static const String welcomeScreen = '/welcomeScreen';
   static const String registerScreen = '/registerScreen';
   static const String loginScreen = '/loginScreen';
