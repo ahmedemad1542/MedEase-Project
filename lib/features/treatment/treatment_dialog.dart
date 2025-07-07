@@ -67,6 +67,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:medease1/core/utils/role_service.dart';
 import 'package:medease1/core/utils/service_locator.dart';
 import '../../core/storage/storage_helper.dart';
 import 'treatment_cubit.dart';
@@ -136,18 +137,23 @@ class TreatmentDialog extends StatelessWidget {
                             ),
                         ],
                       ),
-                      trailing: IconButton(
-                        icon: Icon(Icons.edit),
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder:
-                                (_) => TreatmentFormDialog(
-                                  diseaseId: diseaseId,
-                                  treatment: t,
-                                ),
-                          );
-                        },
+                      trailing: Visibility(
+                        visible:
+                            sl<RoleService>().isAdmin ||
+                            sl<RoleService>().isDoctor,
+                        child: IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (_) => TreatmentFormDialog(
+                                    diseaseId: diseaseId,
+                                    treatment: t,
+                                  ),
+                            );
+                          },
+                        ),
                       ),
                     );
                   },

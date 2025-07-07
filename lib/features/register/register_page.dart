@@ -37,7 +37,7 @@ class RegisterPageState extends State<RegisterPage> {
                 );
               }
               // ------------------------------------------------------------------------------------------------------------------------------------------------
-              if (state is RegisterSuccess) {
+              else if (state is RegisterSuccess) {
                 showAnimatedSnackBar(
                   context,
                   title: "Success",
@@ -208,7 +208,15 @@ class RegisterPageState extends State<RegisterPage> {
                                 // Assuming you add .name to Gender enum
                               ),
                               gender: cubit.selectedGender!.name,
-                              dateOfBirth: '',
+
+                              // dateOfBirth: '1990-05-20',
+                              dateOfBirth:
+                                  cubit.selectedDate != null
+                                      ? cubit.selectedDate!
+                                          .toLocal()
+                                          .toString()
+                                          .split(' ')[0]
+                                      : '',
                             );
                           }
                         },
@@ -217,10 +225,16 @@ class RegisterPageState extends State<RegisterPage> {
                           padding: EdgeInsets.symmetric(vertical: 15),
                           backgroundColor: Color(0xFF2F4EFF),
                         ),
-                        child: Text(
-                          S.of(context).register,
-                          style: TextStyle(fontSize: 16, color: Colors.white),
-                        ),
+                        child:
+                            state is RegisterLoading
+                                ? CircularProgressIndicator(color: Colors.white)
+                                : Text(
+                                  S.of(context).register,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
                       ),
                     ),
                     SizedBox(height: 20),

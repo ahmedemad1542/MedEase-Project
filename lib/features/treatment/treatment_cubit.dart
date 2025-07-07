@@ -22,6 +22,8 @@ class TreatmentCubit extends Cubit<TreatmentState> {
   final TreatmentRepo repo;
   TreatmentCubit(this.repo) : super(TreatmentInitial());
 
+  final bool isPrevilleged = false;
+
   void createTreatment(Map<String, dynamic> data, String diseaseId) async {
     emit(TreatmentLoading());
     try {

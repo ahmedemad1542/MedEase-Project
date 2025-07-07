@@ -5,6 +5,9 @@ import 'package:medease1/features/login/cubit/login_state.dart';
 import 'package:medease1/features/login/model/login_response_model.dart';
 import 'package:medease1/features/login/repo/login_repo.dart';
 
+import '../../../core/utils/role_service.dart';
+import '../../../core/utils/service_locator.dart';
+
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this.loginRepo) : super(LoginInitial());
   final LoginRepo loginRepo;
@@ -24,10 +27,11 @@ class LoginCubit extends Cubit<LoginState> {
       email: email,
       password: password,
     );
-    response.fold(
-      (error) => emit(LoginError(error)),
-      (response) => emit(LoginSuccess(response)),
-    );
+    response.fold((error) => emit(LoginError(error)), (response) async {
+      // Initialize the RoleService to load the user role from storage
+      await sl<RoleService>().init();
+      emit(LoginSuccess(response));
+    });
   }
 
   void submit() {

@@ -21,7 +21,6 @@ class AdvertisementsCubit extends Cubit<AdvertisementsState> {
   int page = 1;
   bool hasMore = true;
   List<AdvertisementsModel> advertisements = [];
-  bool isAdmin = false;
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
 
@@ -29,8 +28,7 @@ class AdvertisementsCubit extends Cubit<AdvertisementsState> {
 
   Future<void> getAdvertisements({bool isloadMore = false}) async {
     if (!hasMore && isloadMore) return;
-    isAdmin =
-        await sl<StorageHelper>().getData(key: StorageKeys.role) == 'Admin';
+
     if (!isloadMore) {
       page = 1;
       advertisements.clear();

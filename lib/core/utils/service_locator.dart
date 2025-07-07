@@ -21,6 +21,7 @@ import 'package:medease1/features/register/repo/register_repo.dart';
 
 import '../../features/disease/disease_repo.dart';
 import '../../features/treatment/treatment_repo.dart';
+import 'role_service.dart';
 
 GetIt sl = GetIt.instance;
 void setupServiceLocator() {
@@ -75,4 +76,7 @@ void setupServiceLocator() {
     () => DiseaseRepo(DioHelper.dio!, sl<StorageHelper>()),
   );
   sl.registerLazySingleton(() => TreatmentRepo(DioHelper.dio!));
+
+  // Register RoleService as a singleton
+  sl.registerSingleton<RoleService>(RoleService());
 }

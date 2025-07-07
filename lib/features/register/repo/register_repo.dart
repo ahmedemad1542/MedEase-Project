@@ -27,7 +27,7 @@ class RegisterRepo {
           "dateOfBirth": dateOfBirth,
         },
       );
-      if (response.statusCode == 201 && response.statusCode == 409) {
+      if (response.statusCode == 201) {
         return right(response.data);
       } else {
         return left(response.toString());

@@ -14,7 +14,6 @@ import 'package:medease1/features/advices/cubit/advices_cubit.dart';
 import 'package:medease1/features/appointment/create_appointment/create_appointment_screen.dart';
 import 'package:medease1/features/appointment/all_appointment/cubit/get_appointment_cubit.dart';
 import 'package:medease1/features/appointment/all_appointment/all_appointment.dart';
-import 'package:medease1/features/chatbot_page.dart';
 import 'package:medease1/features/diseases_page.dart';
 import 'package:medease1/features/doctors/cubit/doctor_cubit.dart';
 import 'package:medease1/features/doctors/doctors_screen.dart';
@@ -61,13 +60,12 @@ class RouterGenerationConfig {
             ),
       ),
       GoRoute(
-  path: AppRoutes.chatBotScreen,
-  name: AppRoutes.chatBotScreen,
-  builder: (context, state) => BlocProvider(
-    create: (_) => ChatCubit(),
-    child: ChatScreen(),
-  ),
-),
+        path: AppRoutes.chatBotScreen,
+        name: AppRoutes.chatBotScreen,
+        builder:
+            (context, state) =>
+                BlocProvider(create: (_) => ChatCubit(), child: ChatScreen()),
+      ),
 
       GoRoute(
         path: AppRoutes.profileScreen,
