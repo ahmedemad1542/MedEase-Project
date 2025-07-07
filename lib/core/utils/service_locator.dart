@@ -14,6 +14,8 @@ import 'package:medease1/features/doctors/cubit/doctor_cubit.dart';
 import 'package:medease1/features/doctors/repo/doctors_repo.dart';
 import 'package:medease1/features/login/cubit/login_cubit.dart';
 import 'package:medease1/features/login/repo/login_repo.dart';
+import 'package:medease1/features/patients/cubit/patient_cubit.dart';
+import 'package:medease1/features/patients/repo/patients_repo.dart';
 import 'package:medease1/features/profile/cubit/profile_cubit.dart';
 import 'package:medease1/features/profile/repo/profile_repo.dart';
 import 'package:medease1/features/register/cubit/register_cubit.dart';
@@ -68,6 +70,10 @@ void setupServiceLocator() {
   );
   // deleteAdvertisement Repo
   sl.registerLazySingleton(() => DeleteAdvertisementRepo(sl<DioHelper>()));
+
+  sl.registerFactory(() => PatientsCubit(sl<PatientsRepo>()));
+  // appointment Repo
+  sl.registerLazySingleton(() => PatientsRepo(sl<DioHelper>()));
 
   // Storage Helper
   sl.registerLazySingleton(() => StorageHelper());

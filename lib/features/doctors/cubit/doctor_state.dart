@@ -23,3 +23,5 @@ class DoctorError extends DoctorState {
 
   DoctorError(this.message);
 }
+
+class DoctorDeleted extends DoctorState {}

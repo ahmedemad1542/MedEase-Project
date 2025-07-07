@@ -14,7 +14,6 @@ import 'package:medease1/features/advices/cubit/advices_cubit.dart';
 import 'package:medease1/features/appointment/create_appointment/create_appointment_screen.dart';
 import 'package:medease1/features/appointment/all_appointment/cubit/get_appointment_cubit.dart';
 import 'package:medease1/features/appointment/all_appointment/all_appointment.dart';
-import 'package:medease1/features/diseases_page.dart';
 import 'package:medease1/features/doctors/cubit/doctor_cubit.dart';
 import 'package:medease1/features/doctors/doctors_screen.dart';
 import 'package:medease1/features/home_page.dart';
@@ -22,6 +21,8 @@ import 'package:medease1/features/lab_test_page.dart';
 import 'package:medease1/features/login/cubit/login_cubit.dart';
 import 'package:medease1/features/login/login_page.dart';
 import 'package:medease1/features/patient/patient_home_screen.dart';
+import 'package:medease1/features/patients/cubit/patient_cubit.dart';
+import 'package:medease1/features/patients/patients_screen.dart';
 import 'package:medease1/features/profile/profile_screen.dart';
 import 'package:medease1/features/profile/cubit/profile_cubit.dart';
 import 'package:medease1/features/register/cubit/register_cubit.dart';
@@ -155,9 +156,11 @@ class RouterGenerationConfig {
       GoRoute(
         path: AppRoutes.patientScreen,
         name: AppRoutes.patientScreen,
-        builder: (context, state) {
-          return PatientHomeScreen();
-        },
+        builder:
+            (context, state) => BlocProvider(
+              create: (context) => sl<PatientsCubit>()..fetchPatients(),
+              child: PatientsScreen(),
+            ),
       ),
       GoRoute(
         path: AppRoutes.myAppointmentsScreen,

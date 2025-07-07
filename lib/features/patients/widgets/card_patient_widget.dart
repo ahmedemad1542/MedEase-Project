@@ -6,22 +6,20 @@ import 'package:medease1/core/utils/role_service.dart';
 
 import '../../../core/utils/service_locator.dart';
 
-class CardDoctorWidget extends StatelessWidget {
+class CardPatientWidget extends StatelessWidget {
   final String gender;
   final String name;
-  final String specialization;
-  final double rate;
+
   final String id;
   final String city;
   final String country;
   final Function() onDelete;
 
-  const CardDoctorWidget({
+  const CardPatientWidget({
     super.key,
     required this.gender,
     required this.name,
-    required this.specialization,
-    required this.rate,
+
     required this.id,
     required this.city,
     required this.country,
@@ -68,11 +66,6 @@ class CardDoctorWidget extends StatelessWidget {
                           fontSize: 18,
                         ),
                       ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        specialization,
-                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
-                      ),
                       SizedBox(height: 6.h),
                       Row(
                         children: [
@@ -105,13 +98,6 @@ class CardDoctorWidget extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: Colors.blue[50],
                     borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    rate.toString(),
-                    style: const TextStyle(
-                      color: Colors.indigoAccent,
-                      fontWeight: FontWeight.bold,
-                    ),
                   ),
                 ),
               ],
@@ -149,7 +135,7 @@ class CardDoctorWidget extends StatelessWidget {
                     child: SizedBox(
                       child: ElevatedButton(
                         onPressed: () {
-                          // TODO: implement Edit Doctor
+                          // TODO: implement Edit Patient
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.green,
@@ -175,9 +161,9 @@ class CardDoctorWidget extends StatelessWidget {
                             context: context,
                             builder:
                                 (context) => AlertDialog(
-                                  title: const Text('Delete Doctor'),
+                                  title: const Text('Delete Patient'),
                                   content: const Text(
-                                    'Are you sure you want to delete this doctor?',
+                                    'Are you sure you want to delete this Patient?',
                                   ),
                                   actions: [
                                     TextButton(

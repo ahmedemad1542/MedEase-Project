@@ -45,4 +45,14 @@ class DoctorCubit extends Cubit<DoctorState> {
       emit(DoctorError(e.toString()));
     }
   }
+
+  Future<void> deleteDoctor(String id) async {
+    emit(DoctorLoading());
+    try {
+      await doctorsRepo.deleteDoctor(id: id);
+      fetchDoctors();
+    } catch (e) {
+      emit(DoctorError(e.toString()));
+    }
+  }
 }

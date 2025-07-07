@@ -45,19 +45,31 @@ class MedEaseHomeScreen extends StatelessWidget {
                 FeatureCard(
                   icon: Icons.local_hospital,
                   label: 'الأطباء',
-                  onTap: null,
+                  onTap: () {
+                    context.pushNamed(AppRoutes.doctorsScreen);
+                  },
                 ),
-                FeatureCard(icon: Icons.shield, label: 'التأمين', onTap: null),
+                FeatureCard(
+                  icon: Icons.shield,
+                  label: 'المرضي',
+                  onTap: () {
+                    context.pushNamed(AppRoutes.patientScreen);
+                  },
+                ),
                 FeatureCard(
                   icon: Icons.calculate,
                   label: 'حاسبة',
                   onTap: () {
                     context.pushNamed(AppRoutes.bmiCalculatorScreen);
                   },
-                ),//TODO
-               FeatureCard(icon: Icons.chat, label: 'Chatbot', onTap: ()  {
-    context.pushNamed(AppRoutes.chatBotScreen);
-  },),
+                ), //TODO
+                FeatureCard(
+                  icon: Icons.chat,
+                  label: 'Chatbot',
+                  onTap: () {
+                    context.pushNamed(AppRoutes.chatBotScreen);
+                  },
+                ),
               ],
             ),
           ),
