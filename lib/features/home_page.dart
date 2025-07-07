@@ -8,8 +8,6 @@ import 'package:medease1/features/advices/advices_screen.dart';
 import 'package:medease1/features/advices/cubit/advices_cubit.dart';
 import 'package:medease1/features/profile/profile_screen.dart';
 import 'disease/diseases_page.dart';
-import 'diseases_page.dart';
-import 'advices_page.dart';
 import 'home_main_page.dart';
 
 class HomePage extends StatefulWidget {

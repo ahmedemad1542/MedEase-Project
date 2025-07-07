@@ -21,14 +21,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   setupServiceLocator();
 
-  // sl<StorageHelper>().deleteData(key: StorageKeys.accessToken);
-  // sl<StorageHelper>().deleteData(key: StorageKeys.role);
-  // sl<StorageHelper>().saveData(
-  //   key: StorageKeys.accessToken,
-  //   value:
-  //       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2ODBhYWQxYzFjZmI1MmRjZmEzMGE5MjUiLCJuYW1lIjoiS2ggTWgiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3NTEzNzk0MTcsImV4cCI6MTc1MTM4MDMxN30.vUIKXm-RSJ47ldjK5B4KHBAulBhbuyNgXl9ZGYUck4g',
-  // );
-
+  
   runApp(
     MultiBlocProvider(
       providers: [

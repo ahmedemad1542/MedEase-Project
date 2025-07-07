@@ -54,8 +54,8 @@ class MedEaseHomeScreen extends StatelessWidget {
                   onTap: () {
                     context.pushNamed(AppRoutes.bmiCalculatorScreen);
                   },
-                ),
-                FeatureCard(icon: Icons.chat, label: 'Chatbot', onTap: ()  {
+                ),//TODO
+               FeatureCard(icon: Icons.chat, label: 'Chatbot', onTap: ()  {
     context.pushNamed(AppRoutes.chatBotScreen);
   },),
               ],

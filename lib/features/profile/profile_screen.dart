@@ -24,7 +24,10 @@ class ProfileScreenState extends State<ProfileScreen> {
     return BlocProvider(
       create: (context) => ProfileCubit(sl<ProfileRepo>())..fetchProfile(),
       child: Scaffold(
-        appBar: AppBar(title: const Text('Profile')),
+        appBar: AppBar(
+          title: const Text('Profile'),
+          backgroundColor: Colors.blue,
+        ),
         body: BlocConsumer<ProfileCubit, ProfileState>(
           listener: (BuildContext context, ProfileState state) {
             if (state is ProfileError) {
@@ -165,19 +168,34 @@ class ProfileScreenState extends State<ProfileScreen> {
                       ),
                       SizedBox(height: 20.h),
                       Center(
-                        child: InkWell(
-                          onTap: () {
-                            sl<StorageHelper>().deleteData(
-                              key: StorageKeys.accessToken,
-                            );
-                            sl<StorageHelper>().deleteData(
-                              key: StorageKeys.role,
-                            );
-                            context.pushReplacementNamed(AppRoutes.loginScreen);
-                          },
-                          child: const Text(
-                            'Logout',
-                            style: TextStyle(color: Colors.red, fontSize: 18),
+                        child: Container(
+                          width: 100,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.blue,
+                          ),
+                          child: InkWell(
+                            onTap: () {
+                              sl<StorageHelper>().deleteData(
+                                key: StorageKeys.accessToken,
+                              );
+                              sl<StorageHelper>().deleteData(
+                                key: StorageKeys.role,
+                              );
+                              context.pushReplacementNamed(
+                                AppRoutes.loginScreen,
+                              );
+                            },
+                            child: Center(
+                              child: const Text(
+                                'Logout',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
