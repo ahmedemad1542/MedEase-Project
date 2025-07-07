@@ -1,18 +1,19 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:medease1/core/utils/my_logger.dart';
 import 'package:medease1/features/register/cubit/register_state.dart';
 import 'package:medease1/features/register/model/register_model.dart';
 import 'package:medease1/features/register/repo/register_repo.dart';
 
-enum Gender { male, female }
+enum Gender { Male, Female }
 
 extension GenderExtension on Gender {
   String get label {
     switch (this) {
-      case Gender.male:
+      case Gender.Male:
         return "Male";
-      case Gender.female:
+      case Gender.Female:
         return "Female";
     }
   }
@@ -44,7 +45,7 @@ class RegisterCubit extends Cubit<RegisterState> {
     final date = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
+      firstDate: DateTime(1900),
       lastDate: DateTime(2100),
     );
 
@@ -75,8 +76,12 @@ class RegisterCubit extends Cubit<RegisterState> {
       dateOfBirth: dateOfBirth,
     );
     response.fold(
-      (error) => emit(RegisterError(error.toString())),
-      (right) => emit(RegisterSuccess("create account successfully")),
+      (error) {
+        emit(RegisterError(error.toString()));
+      },
+      (right) {
+        emit(RegisterSuccess(right.toString()));
+      },
     );
   }
 }

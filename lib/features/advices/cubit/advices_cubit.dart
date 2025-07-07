@@ -17,16 +17,13 @@ class AdviceCubit extends Cubit<AdviceState> {
 
   AdviceCubit(this.adviceRepo) : super(AdviceInitial());
   List<String> categories = [];
-  bool isPrevelliged = true;
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   String selectedCategory = '';
 
   Future<void> getAdvices() async {
     emit(AdviceLoading());
-    isPrevelliged =
-        await sl<StorageHelper>().getData(key: StorageKeys.role) == 'Admin' ||
-        await sl<StorageHelper>().getData(key: StorageKeys.role) == 'Doctor';
+
     try {
       final response = await adviceRepo.getAllAdvices();
       final List<dynamic> data = response?.data['data'] ?? [];

@@ -208,6 +208,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:medease1/core/utils/role_service.dart';
 import 'package:medease1/core/utils/service_locator.dart';
 import 'package:medease1/features/disease/disease_cubit.dart';
 import 'package:medease1/features/disease/disease_form_dialog.dart';
@@ -224,19 +225,9 @@ class DiseasesPage extends StatefulWidget {
 }
 
 class _DiseasesPageState extends State<DiseasesPage> {
-  bool isAdmin = false;
-
   @override
   void initState() {
     super.initState();
-    loadRole();
-  }
-
-  Future<void> loadRole() async {
-    final role = await sl<StorageHelper>().getData(key: "Role");
-    setState(() {
-      isAdmin = role == "Admin";
-    });
   }
 
   @override
@@ -248,7 +239,7 @@ class _DiseasesPageState extends State<DiseasesPage> {
           title: Text("Diseases"),
           backgroundColor: Colors.blueAccent[800],
           actions: [
-            if (isAdmin)
+            if (sl<RoleService>().isAdmin || sl<RoleService>().isDoctor)
               Padding(
                 padding: const EdgeInsets.only(right: 10.0),
                 child: IconButton(
@@ -281,7 +272,8 @@ class _DiseasesPageState extends State<DiseasesPage> {
                     endActionPane: ActionPane(
                       motion: ScrollMotion(),
                       children: [
-                        if (isAdmin) ...[
+                        if (sl<RoleService>().isAdmin ||
+                            sl<RoleService>().isDoctor) ...[
                           SlidableAction(
                             onPressed: (_) {
                               showDialog(

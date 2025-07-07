@@ -5,6 +5,8 @@ import 'package:medease1/features/advices/cubit/advices_cubit.dart';
 import 'package:medease1/features/advices/cubit/advices_state.dart';
 import 'package:medease1/features/advices/model/advices_model.dart';
 
+import '../../core/utils/role_service.dart';
+
 class AdviceScreen extends StatefulWidget {
   const AdviceScreen({super.key});
 
@@ -31,102 +33,109 @@ class _AdviceScreenState extends State<AdviceScreen> {
         title: const Text('Advices'),
         backgroundColor: Colors.blue,
         actions: [
-          Visibility(
-            visible: context.read<AdviceCubit>().isPrevelliged,
-            child: IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Create Advice'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextField(
-                            controller: cubit.titleController,
-                            decoration: const InputDecoration(
-                              labelText: 'Title',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
+          BlocBuilder<AdviceCubit, AdviceState>(
+            builder: (context, state) {
+              return Visibility(
+                visible:
+                    sl<RoleService>().isAdmin || sl<RoleService>().isDoctor,
+                child: IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Create Advice'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextField(
+                                controller: cubit.titleController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Title',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          SizedBox(
-                            width: double.infinity,
-                            child: DropdownMenu(
-                              hintText: 'Select Category',
-                              expandedInsets: EdgeInsets.zero,
+                              SizedBox(height: 8),
+                              SizedBox(
+                                width: double.infinity,
+                                child: DropdownMenu(
+                                  hintText: 'Select Category',
+                                  expandedInsets: EdgeInsets.zero,
 
-                              dropdownMenuEntries:
-                                  cubit.categories
-                                      .map(
-                                        (category) => DropdownMenuEntry(
-                                          value: category,
-                                          label: category,
-                                        ),
-                                      )
-                                      .toList(),
-                              onSelected: (value) {
-                                cubit.selectedCategory = value ?? '';
-                              },
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          TextField(
-                            controller: cubit.descriptionController,
-                            decoration: const InputDecoration(
-                              labelText: 'Description',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(8),
+                                  dropdownMenuEntries:
+                                      cubit.categories
+                                          .map(
+                                            (category) => DropdownMenuEntry(
+                                              value: category,
+                                              label: category,
+                                            ),
+                                          )
+                                          .toList(),
+                                  onSelected: (value) {
+                                    cubit.selectedCategory = value ?? '';
+                                  },
                                 ),
                               ),
-                            ),
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
-                              fontSize: 12,
-                            ),
-                            maxLines: 5,
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () async {
-                            if (cubit.titleController.text.isEmpty ||
-                                cubit.selectedCategory.isEmpty ||
-                                cubit.descriptionController.text.isEmpty) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Please fill all fields'),
+                              SizedBox(height: 8),
+                              TextField(
+                                controller: cubit.descriptionController,
+                                decoration: const InputDecoration(
+                                  labelText: 'Description',
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                  ),
                                 ),
-                              );
-                              return;
-                            } else {
-                              await cubit.createAdvice(
-                                diseasesCategoryId: cubit.selectedCategory,
-                                title: cubit.titleController.text,
-                                description: cubit.descriptionController.text,
-                              );
-                              cubit.titleController.clear();
-                              cubit.descriptionController.clear();
-                              cubit.selectedCategory = '';
-                              if (context.mounted) Navigator.of(context).pop();
-                            }
-                          },
-                          child: const Text('Create'),
-                        ),
-                      ],
+                                style: TextStyle(
+                                  color: Colors.grey.shade600,
+                                  fontSize: 12,
+                                ),
+                                maxLines: 5,
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () async {
+                                if (cubit.titleController.text.isEmpty ||
+                                    cubit.selectedCategory.isEmpty ||
+                                    cubit.descriptionController.text.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text('Please fill all fields'),
+                                    ),
+                                  );
+                                  return;
+                                } else {
+                                  await cubit.createAdvice(
+                                    diseasesCategoryId: cubit.selectedCategory,
+                                    title: cubit.titleController.text,
+                                    description:
+                                        cubit.descriptionController.text,
+                                  );
+                                  cubit.titleController.clear();
+                                  cubit.descriptionController.clear();
+                                  cubit.selectedCategory = '';
+                                  if (context.mounted)
+                                    Navigator.of(context).pop();
+                                }
+                              },
+                              child: const Text('Create'),
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
-                );
-              },
-              icon: Icon(Icons.add),
-            ),
+                  icon: Icon(Icons.add),
+                ),
+              );
+            },
           ),
         ],
       ),
