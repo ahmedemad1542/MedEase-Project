@@ -7,6 +7,7 @@ import 'package:medease1/core/storage/storage_helper.dart';
 import 'package:medease1/core/utils/service_locator.dart';
 import 'package:medease1/features/advices/cubit/advices_state.dart';
 import 'package:medease1/features/advices/model/advices_model.dart';
+import 'package:medease1/features/advices/model/category_model.dart';
 
 import 'package:medease1/features/advices/repo/advices_repo.dart';
 
@@ -16,10 +17,10 @@ class AdviceCubit extends Cubit<AdviceState> {
   final AdviceRepo adviceRepo;
 
   AdviceCubit(this.adviceRepo) : super(AdviceInitial());
-  List<String> categories = [];
+  List<CategoryModel> categories = [];
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  String selectedCategory = '';
+  CategoryModel? selectedCategory;
 
   Future<void> getAdvices() async {
     emit(AdviceLoading());
@@ -28,7 +29,8 @@ class AdviceCubit extends Cubit<AdviceState> {
       final response = await adviceRepo.getAllAdvices();
       final List<dynamic> data = response?.data['data'] ?? [];
       final advices = data.map((e) => AdviceModel.fromJson(e)).toList();
-      categories = advices.map((e) => e.diseasesCategoryName).toSet().toList();
+      // categories = advices.map((e) => e.diseasesCategoryName).toSet().toList()
+      categories = await adviceRepo.getCategories() ?? [];
       emit(AdviceLoaded(advices));
     } catch (e) {
       emit(AdviceError(e.toString()));
@@ -64,9 +66,9 @@ class AdviceCubit extends Cubit<AdviceState> {
   }) async {
     emit(AdviceCreating());
     try {
-      //TODO: REmember to access category id from the selected category & doctor id
+      //TODO: REmember to access doctor id
       await adviceRepo.createAdvice(
-        diseasesCategoryId: '67bf1284a133949f719b01e2',
+        diseasesCategoryId: diseasesCategoryId,
         title: title,
         description: description,
         doctorId: '6852a434bc451d9b3e2ecca8',
@@ -75,6 +77,40 @@ class AdviceCubit extends Cubit<AdviceState> {
       getAdvices();
     } catch (e) {
       emit(AdviceCreatingError("Failed to create advice, try again later"));
+      getAdvices();
+    }
+  }
+
+  Future<void> updateAdvice({
+    required String adviceId,
+    required String diseasesCategoryId,
+    required String title,
+    required String description,
+  }) async {
+    emit(AdviceCreating());
+    try {
+      await adviceRepo.updateAdvice(
+        adviceId: adviceId,
+        diseasesCategoryId: diseasesCategoryId,
+        title: title,
+        description: description,
+      );
+      emit(AdviceCreated('Advice updated successfully'));
+      getAdvices();
+    } catch (e) {
+      emit(AdviceCreatingError("Failed to update advice, try again later"));
+      getAdvices();
+    }
+  }
+
+  Future<void> deleteAdvice(String adviceId) async {
+    emit(AdviceCreating());
+    try {
+      await adviceRepo.deleteAdvice(adviceId);
+      emit(AdviceCreated('Advice deleted successfully'));
+      getAdvices();
+    } catch (e) {
+      emit(AdviceCreatingError("Failed to delete advice, try again later"));
       getAdvices();
     }
   }

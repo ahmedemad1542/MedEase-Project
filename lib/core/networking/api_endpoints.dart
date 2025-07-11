@@ -12,7 +12,6 @@ class ApiEndpoints {
   static const String getDoctors = "/users/doctors";
   static const String getPatients = "/patient/all";
 
-
   static String createAppointment(id) => "/appointments/doctor/$id";
   static String deleteAdvertisement(id) => "/advertisements/$id";
 
@@ -25,6 +24,7 @@ class ApiEndpoints {
 
   static const String updateAdvice = '/advices/'; // زائد ID ديناميك في الريبو
   static const String deleteAdvice = '/advices/';
+  static const String getCategories = '/diseasescategories/';
 
   // ✅ AI Chatbot Endpoints
   static const String aiStartSession = "/ai/start_session";
@@ -35,7 +35,5 @@ class ApiEndpoints {
   static String updateDoctor(id) => "/doctor/$id";
   static String deletePatient(id) => "/patient/$id";
   static String updatePatient(id) => "/patient/$id";
-
-
 }// زائد ID ديناميك في الريبو
 

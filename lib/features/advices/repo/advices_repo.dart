@@ -8,6 +8,7 @@ import 'package:medease1/core/storage/storage_keys.dart';
 import 'package:medease1/core/utils/service_locator.dart';
 import 'package:medease1/core/storage/storage_helper.dart';
 import 'package:medease1/features/advices/model/advices_model.dart';
+import 'package:medease1/features/advices/model/category_model.dart';
 import '../../../core/networking/dio_helper.dart';
 
 class AdviceRepo {
@@ -68,5 +69,35 @@ class AdviceRepo {
     return await DioHelper.dio!.post(
       '${ApiEndpoints.dislikeAdvice}$adviceId/dislike',
     );
+  }
+
+  Future<List<CategoryModel>?> getCategories() async {
+    try {
+      final response = await dioHelper.getResponse(
+        endpoint: ApiEndpoints.getCategories,
+      );
+
+      if (response != null && response.statusCode == 200) {
+        // 1. Access the list from the 'data' key in the response.
+        final List<dynamic> dataList = response.data['data'];
+
+        // 2. Map the raw list into a typed List<Category>.
+        final List<CategoryModel> categories =
+            dataList
+                .map(
+                  (item) =>
+                      CategoryModel.fromJson(item as Map<String, dynamic>),
+                )
+                .toList();
+
+        // 3. Return the parsed list.
+        return categories;
+      }
+    } catch (e) {
+      log('Error fetching and parsing categories: $e');
+    }
+
+    // Return null if anything goes wrong.
+    return null;
   }
 }
