@@ -30,7 +30,7 @@ class _AdviceScreenState extends State<AdviceScreen> {
     var cubit = context.read<AdviceCubit>();
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Advices'),
+        title: const Text('Advices', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.blue,
         actions: [
           BlocBuilder<AdviceCubit, AdviceState>(
@@ -174,7 +174,7 @@ class _AdviceScreenState extends State<AdviceScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            tileColor: Colors.blue.shade50,
+                            tileColor: Colors.green,
                             title: Text(
                               category,
                               style: const TextStyle(
@@ -196,6 +196,7 @@ class _AdviceScreenState extends State<AdviceScreen> {
                               );
                             },
                           ),
+                          SizedBox(height: 25),
                           if (selectedCategory == category)
                             ...state.advices
                                 .where(
