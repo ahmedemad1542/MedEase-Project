@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:medease1/features/Ai%20Chatbot/cubit/chatbot_cubit.dart';
-import 'package:medease1/features/Ai%20Chatbot/cubit/chatbot_states.dart';
+import 'package:medease1/features/Ai%20Chatbot/cubit/aichatbot_cubit.dart';
+import 'package:medease1/features/Ai%20Chatbot/cubit/aichatbot_states.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  const ChatScreen.aiChatScreen({super.key});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -17,7 +17,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<ChatCubit>().startSession();
+    context.read<AiChatCubit>().startSession();
   }
 
   void _sendMessage(String text) {
@@ -25,7 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
     setState(() {
       messages.add({'role': 'user', 'text': text});
     });
-    context.read<ChatCubit>().sendMessage(text);
+    context.read<AiChatCubit>().sendMessage(text);
     _controller.clear();
   }
 
@@ -39,7 +39,7 @@ class _ChatScreenState extends State<ChatScreen> {
         iconTheme: const IconThemeData(color: Colors.white), // ← هنا السحر
       ),
       body: SafeArea(
-        child: BlocConsumer<ChatCubit, ChatState>(
+        child: BlocConsumer<AiChatCubit, AiChatState>(
           listener: (context, state) {
             if (state is ChatSuccess) {
               setState(() {

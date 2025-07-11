@@ -45,6 +45,10 @@ class LoginRepo {
             value: loginResponseModel.role!,
           );
           await sl<StorageHelper>().saveData(
+            key: StorageKeys.userId,
+            value: loginResponseModel.userId!,
+          );
+          await sl<StorageHelper>().saveData(
             key: StorageKeys.refreshToken,
             value: loginResponseModel.refreshToken!,
           );
@@ -54,6 +58,7 @@ class LoginRepo {
             key: StorageKeys.name,
             value: name.toString(),
           );
+
           await sl<StorageHelper>().saveData(
             key: StorageKeys.name,
             value: decodedToken["name"],

@@ -11,6 +11,7 @@ class MedEaseHomeScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: const Text(' MedEase', style: TextStyle(color: Colors.white)),
+        
       ),
       body: Column(
         children: [

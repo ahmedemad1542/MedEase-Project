@@ -4,7 +4,7 @@ import 'package:medease1/calculators/bmi_page.dart';
 import 'package:medease1/core/utils/service_locator.dart';
 import 'package:medease1/core/routing/app_routes.dart';
 import 'package:medease1/features/Ai%20Chatbot/ai_chatbot_screen.dart';
-import 'package:medease1/features/Ai%20Chatbot/cubit/chatbot_cubit.dart';
+import 'package:medease1/features/Ai%20Chatbot/cubit/aichatbot_cubit.dart';
 import 'package:medease1/features/advertisements/deleteAdvertisement/cubit/delete_advertisement_cubit.dart';
 import 'package:medease1/features/advertisements/deleteAdvertisement/delete_advertisement_screen.dart';
 import 'package:medease1/features/advertisements/getAdvertisement/advertisement_screen.dart';
@@ -30,6 +30,7 @@ import 'package:medease1/features/register/register_page.dart';
 import 'package:medease1/features/splash_screen/splash_screen.dart';
 import 'package:medease1/features/welcome/welcome_page.dart';
 
+import '../../features/Ai Chatbot/cubit/aichatbot_cubit.dart';
 import '../../features/disease/diseases_page.dart';
 
 class RouterGenerationConfig {
@@ -64,8 +65,10 @@ class RouterGenerationConfig {
         path: AppRoutes.chatBotScreen,
         name: AppRoutes.chatBotScreen,
         builder:
-            (context, state) =>
-                BlocProvider(create: (_) => ChatCubit(), child: ChatScreen()),
+            (context, state) => BlocProvider(
+              create: (_) => AiChatCubit(),
+              child: ChatScreen.aiChatScreen(),
+            ),
       ),
 
       GoRoute(

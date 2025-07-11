@@ -35,5 +35,13 @@ class ApiEndpoints {
   static String updateDoctor(id) => "/doctor/$id";
   static String deletePatient(id) => "/patient/$id";
   static String updatePatient(id) => "/patient/$id";
-}// زائد ID ديناميك في الريبو
+
+
+  // ✅ Conversation & Messages
+  static String getUserConversations(String userId) => '/conversation/$userId';
+  static String getConversationMessages(String conversationId) =>
+      '/message/$conversationId';
+  static const String sendMessage = '/message';
+  static const String createConversation = '/conversation';
+}
 

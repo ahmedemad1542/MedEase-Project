@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:medease1/core/networking/api_endpoints.dart';
 import 'package:medease1/core/networking/dio_helper.dart';
 import 'package:medease1/core/utils/service_locator.dart';
-import 'package:medease1/features/Ai%20Chatbot/cubit/chatbot_states.dart';
+import 'package:medease1/features/Ai%20Chatbot/cubit/aichatbot_states.dart';
 
-class ChatCubit extends Cubit<ChatState> {
-  ChatCubit() : super(ChatInitial());
+class AiChatCubit extends Cubit<AiChatState> {
+  AiChatCubit() : super(ChatInitial());
 
   final Dio dio = DioHelper.dio!;
   String? sessionId;
@@ -17,12 +17,14 @@ class ChatCubit extends Cubit<ChatState> {
       final res = await dio.post(ApiEndpoints.aiStartSession);
       sessionId = res.data['data']['session_id'];
 
-      emit(ChatSuccess(
-        prompt: res.data['data']['prompt'],
-        options: List<String>.from(res.data['data']['options']),
-        state: res.data['data']['state'],
-        userInput: null,
-      ));
+      emit(
+        ChatSuccess(
+          prompt: res.data['data']['prompt'],
+          options: List<String>.from(res.data['data']['options']),
+          state: res.data['data']['state'],
+          userInput: null,
+        ),
+      );
     } catch (e) {
       emit(ChatError('Failed to start session: $e'));
     }
@@ -38,18 +40,17 @@ class ChatCubit extends Cubit<ChatState> {
     try {
       final res = await dio.post(
         ApiEndpoints.aiSendMessage,
-        data: {
-          'session_id': sessionId,
-          'user_input': userInput,
-        },
+        data: {'session_id': sessionId, 'user_input': userInput},
       );
 
-      emit(ChatSuccess(
-        prompt: res.data['data']['prompt'],
-        options: List<String>.from(res.data['data']['options']),
-        state: res.data['data']['state'],
-        userInput: userInput,
-      ));
+      emit(
+        ChatSuccess(
+          prompt: res.data['data']['prompt'],
+          options: List<String>.from(res.data['data']['options']),
+          state: res.data['data']['state'],
+          userInput: userInput,
+        ),
+      );
     } catch (e) {
       emit(ChatError('Failed to send message: $e'));
     }

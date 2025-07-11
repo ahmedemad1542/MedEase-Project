@@ -1,10 +1,10 @@
-abstract class ChatState {}
+abstract class AiChatState {}
 
-class ChatInitial extends ChatState {}
+class ChatInitial extends AiChatState {}
 
-class ChatLoading extends ChatState {}
+class ChatLoading extends AiChatState {}
 
-class ChatSuccess extends ChatState {
+class ChatSuccess extends AiChatState {
   final String prompt;
   final List<String> options;
   final String state;
@@ -18,7 +18,7 @@ class ChatSuccess extends ChatState {
   });
 }
 
-class ChatError extends ChatState {
+class ChatError extends AiChatState {
   final String message;
 
   ChatError(this.message);
